@@ -29,6 +29,18 @@ function primaryCategory(cats: string[]): string {
   )[0] ?? cats[0];
 }
 
+function getArtVariant(imagePath: string | null, variant: "hero" | "featured" | "card"): string | null {
+  if (!imagePath || !imagePath.startsWith("/images/blog/")) return imagePath;
+  const parsed = path.parse(imagePath);
+  const variantPath = path.join(parsed.dir, `${parsed.name}-${variant}${parsed.ext}`);
+  
+  const publicDir = path.join(process.cwd(), "public");
+  if (fs.existsSync(path.join(publicDir, variantPath))) {
+    return variantPath;
+  }
+  return imagePath;
+}
+
 export async function generateStaticParams() {
   const contentDir = path.join(process.cwd(), "src", "content");
   const files = fs.readdirSync(contentDir).filter((f) => f.endsWith(".mdx"));
@@ -54,7 +66,7 @@ export default async function Image({
     primCat = primaryCategory(categories);
     badgeColor = CATEGORY_COLORS[primCat] ?? "#374151";
     if (data.featuredImage) {
-      featuredImageUrl = `https://clayknowseverything.com${data.featuredImage}`;
+      featuredImageUrl = `https://clayknowseverything.com${getArtVariant(data.featuredImage, "hero")}`;
     }
   }
 

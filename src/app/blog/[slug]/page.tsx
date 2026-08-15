@@ -32,6 +32,18 @@ function primaryCategory(cats: string[]): string {
   )[0] ?? cats[0];
 }
 
+function getArtVariant(imagePath: string | null, variant: "hero" | "featured" | "card"): string | null {
+  if (!imagePath || !imagePath.startsWith("/images/blog/")) return imagePath;
+  const parsed = path.parse(imagePath);
+  const variantPath = path.join(parsed.dir, `${parsed.name}-${variant}${parsed.ext}`);
+  
+  const publicDir = path.join(process.cwd(), "public");
+  if (fs.existsSync(path.join(publicDir, variantPath))) {
+    return variantPath;
+  }
+  return imagePath;
+}
+
 /* ── Related posts ── */
 interface RelatedPost {
   title: string;
@@ -247,7 +259,7 @@ export default async function BlogPostPage({
       {featuredImage && (
         <div className="relative w-full h-[420px] md:h-[520px] bg-gray-900 overflow-hidden">
           <Image
-            src={featuredImage}
+            src={getArtVariant(featuredImage, "hero")!}
             alt={data.title ?? ""}
             fill
             priority
@@ -395,7 +407,7 @@ export default async function BlogPostPage({
                   <div className="relative h-44 bg-gray-100">
                     {post.featuredImage ? (
                       <Image
-                        src={post.featuredImage}
+                        src={getArtVariant(post.featuredImage, "card")!}
                         alt={post.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"

@@ -95,6 +95,40 @@ function updateMdxReferences() {
   }
 }
 
+/* ── 4. Generate Art-Directed Variants for Blog Images ── */
+async function generateVariants() {
+  const BLOG_IMG_DIR = path.join(IMAGE_DIR, "blog");
+  if (!fs.existsSync(BLOG_IMG_DIR)) return;
+
+  const files = fs.readdirSync(BLOG_IMG_DIR).filter(f => f.endsWith(".webp") && !f.endsWith("-hero.webp") && !f.endsWith("-featured.webp") && !f.endsWith("-card.webp"));
+  
+  for (const file of files) {
+    const baseName = file.replace(/\.webp$/i, "");
+    const filePath = path.join(BLOG_IMG_DIR, file);
+    
+    const variants = [
+      { suffix: "hero", width: 1600, height: 840 },
+      { suffix: "featured", width: 900, height: 1100 },
+      { suffix: "card", width: 800, height: 500 }
+    ];
+
+    for (const v of variants) {
+      const variantPath = path.join(BLOG_IMG_DIR, `${baseName}-${v.suffix}.webp`);
+      if (!fs.existsSync(variantPath)) {
+        try {
+          await sharp(filePath)
+            .resize(v.width, v.height, { fit: 'cover', position: 'attention' })
+            .webp({ quality: 85 })
+            .toFile(variantPath);
+          console.log(`  🎨 Generated variant: ${baseName}-${v.suffix}.webp`);
+        } catch (err) {
+          console.error(`  ✗  Failed variant ${v.suffix} for ${file}: ${err.message}`);
+        }
+      }
+    }
+  }
+}
+
 /* ── Run ── */
 console.log("\n🔄 Converting images to WebP...\n");
 
@@ -104,6 +138,9 @@ console.log(`Found ${images.length} images to process.\n`);
 for (const img of images) {
   await convertToWebP(img);
 }
+
+console.log("\n🎨 Generating art-directed variants for blog images...\n");
+await generateVariants();
 
 console.log("\n📝 Updating MDX frontmatter references...\n");
 updateMdxReferences();

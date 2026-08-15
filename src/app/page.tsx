@@ -44,6 +44,18 @@ function categoryColor(cats: string[]): string {
   return CATEGORY_COLORS[cat] ?? CATEGORY_COLORS["Default"];
 }
 
+function getArtVariant(imagePath: string | null, variant: "hero" | "featured" | "card"): string | null {
+  if (!imagePath || !imagePath.startsWith("/images/blog/")) return imagePath;
+  const parsed = path.parse(imagePath);
+  const variantPath = path.join(parsed.dir, `${parsed.name}-${variant}${parsed.ext}`);
+  
+  const publicDir = path.join(process.cwd(), "public");
+  if (fs.existsSync(path.join(publicDir, variantPath))) {
+    return variantPath;
+  }
+  return imagePath;
+}
+
 /* ── Read all MDX posts from src/content/ ── */
 function getAllPosts(): Post[] {
   const contentDir = path.join(process.cwd(), "src", "content");
@@ -114,7 +126,7 @@ export default function HomePage() {
               <div className="relative h-72 md:h-full min-h-[420px]">
                 {featured.featuredImage ? (
                   <Image
-                    src={featured.featuredImage}
+                    src={getArtVariant(featured.featuredImage, "featured")!}
                     alt={featured.title}
                     fill
                     priority
@@ -169,7 +181,7 @@ export default function HomePage() {
               <div className="relative h-48 bg-gray-50">
                 {post.featuredImage ? (
                   <Image
-                    src={post.featuredImage}
+                    src={getArtVariant(post.featuredImage, "card")!}
                     alt={post.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 25vw"
