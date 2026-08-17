@@ -5,6 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+/* ── Helpers ── */
+function fmtDate(dateStr: string): string {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-");
+  if (!y || !m || !d) return dateStr;
+  return `${d}/${m}/${y}`;
+}
+
 /* ── Valid category slugs → display names ── */
 const CATEGORY_MAP: Record<string, string> = {
   entertainment: "Entertainment",
@@ -232,7 +240,7 @@ export default async function CategoryPage({
                       {post.excerpt}
                     </p>
                   )}
-                  <span className="text-xs text-gray-400 font-medium">By Clay · {post.date}</span>
+                  <span className="text-xs text-gray-400 font-medium">By Clay · {fmtDate(post.date)}</span>
                 </div>
               </Link>
             ))}

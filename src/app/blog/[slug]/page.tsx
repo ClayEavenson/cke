@@ -9,6 +9,13 @@ import { notFound } from "next/navigation";
 /* ── Helpers ── */
 const CONTENT_DIR = path.join(process.cwd(), "src", "content");
 
+function fmtDate(dateStr: string): string {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-");
+  if (!y || !m || !d) return dateStr;
+  return `${d}/${m}/${y}`;
+}
+
 const CATEGORY_COLORS: Record<string, string> = {
   "Entertainment": "bg-rose-700",
   "Tech":          "bg-violet-700",
@@ -291,7 +298,7 @@ export default async function BlogPostPage({
               {data.title}
             </h1>
             <p className="text-gray-300 text-sm mt-3 font-medium">
-              By Clay &nbsp;·&nbsp; {data.date}
+              By Clay &nbsp;·&nbsp; {fmtDate(data.date)}
             </p>
           </div>
         </div>
@@ -319,7 +326,7 @@ export default async function BlogPostPage({
           <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-bold text-black leading-tight">
             {data.title}
           </h1>
-          <p className="text-gray-500 text-sm mt-3">By Clay &nbsp;·&nbsp; {data.date}</p>
+          <p className="text-gray-500 text-sm mt-3">By Clay &nbsp;·&nbsp; {fmtDate(data.date)}</p>
         </div>
       )}
 
@@ -338,7 +345,7 @@ export default async function BlogPostPage({
           </div>
           <div>
             <p className="text-sm font-semibold text-black">Clay</p>
-            <p className="text-xs text-gray-400">{data.date} &nbsp;·&nbsp; {readingTime} min read</p>
+            <p className="text-xs text-gray-400">{fmtDate(data.date)} &nbsp;·&nbsp; {readingTime} min read</p>
           </div>
           {/* All category badges */}
           {categories.length > 0 && (
@@ -428,7 +435,7 @@ export default async function BlogPostPage({
                     <h3 className="font-[family-name:var(--font-playfair)] text-black text-sm font-bold leading-snug line-clamp-2 mb-2">
                       {post.title}
                     </h3>
-                    <span className="text-xs text-gray-400">By Clay · {post.date}</span>
+                    <span className="text-xs text-gray-400">By Clay · {fmtDate(post.date)}</span>
                   </div>
                 </Link>
               ))}

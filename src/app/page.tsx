@@ -4,6 +4,14 @@ import matter from "gray-matter";
 import Image from "next/image";
 import Link from "next/link";
 
+/* ── Helpers ── */
+function fmtDate(dateStr: string): string {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-");
+  if (!y || !m || !d) return dateStr;
+  return `${d}/${m}/${y}`;
+}
+
 /* ── Types ── */
 interface Post {
   title: string;
@@ -216,7 +224,7 @@ export default function HomePage() {
                     {post.excerpt}
                   </p>
                 )}
-                <span className="text-xs text-gray-400 font-medium">By Clay · {post.date}</span>
+                <span className="text-xs text-gray-400 font-medium">By Clay · {fmtDate(post.date)}</span>
               </div>
             </Link>
           ))}
