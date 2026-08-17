@@ -9,7 +9,7 @@ function fmtDate(dateStr: string): string {
   if (!dateStr) return "";
   const [y, m, d] = dateStr.split("-");
   if (!y || !m || !d) return dateStr;
-  return `${d}/${m}/${y}`;
+  return `${parseInt(m)}/${parseInt(d)}/${y}`;
 }
 
 /* ── Types ── */
