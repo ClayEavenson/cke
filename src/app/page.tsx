@@ -163,7 +163,7 @@ export default function HomePage() {
               </div>
 
               <div className="absolute bottom-0 left-0 right-0 p-6">
-                <p className="text-gray-400 text-xs mb-2">{featured.date}</p>
+                <p className="text-gray-400 text-xs mb-2">{fmtDate(featured.date)}</p>
                 <h2 className="font-[family-name:var(--font-playfair)] text-white text-2xl md:text-3xl font-bold leading-snug mb-2">
                   {featured.title}
                 </h2>
