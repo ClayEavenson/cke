@@ -105,7 +105,7 @@ export async function generateMetadata({
   const excerpt = data.description || content
     .replace(/!\[.*?\]\(.*?\)/g, "")
     .replace(/#{1,6}\s+/g, "")
-    .replace(/\*\*|__|\*|_/g, "")
+    .replace(/\*\*|__|\\*|_/g, "")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .split("\n")
     .map((l: string) => l.trim())
@@ -114,9 +114,18 @@ export async function generateMetadata({
 
   const title = data.title ?? slug;
   const ogTitle = title.length > 60 ? title.slice(0, 57) + "\u2026" : title;
-  const ogImage = data.featuredImage
+
+  // On-site featured image (hero, card, archives)
+  const featuredImageUrl = data.featuredImage
     ? `https://clayknowseverything.com${data.featuredImage}`
     : "https://clayknowseverything.com/images/logo.png";
+
+  // Social-share image: use dedicated socialImage when present, else fall back to featuredImage
+  const socialImageUrl = data.socialImage
+    ? `https://clayknowseverything.com${data.socialImage}`
+    : featuredImageUrl;
+
+  const socialImageAlt = data.socialImageAlt || ogTitle;
 
   return {
     title,
@@ -133,13 +142,13 @@ export async function generateMetadata({
       siteName: "Clay Knows Everything",
       publishedTime: data.date ? new Date(data.date).toISOString() : undefined,
       authors: ["Clay"],
-      images: [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }],
+      images: [{ url: socialImageUrl, width: 1200, height: 630, alt: socialImageAlt }],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: excerpt,
-      images: [ogImage],
+      images: [socialImageUrl],
     },
   };
 }

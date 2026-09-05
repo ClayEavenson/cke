@@ -15,7 +15,7 @@ const IMAGE_DIR = path.join(process.cwd(), "public", "images");
 const CONTENT_DIR = path.join(process.cwd(), "src", "content");
 const EXTENSIONS = [".jpg", ".jpeg", ".png"];
 // Keep these as-is (favicon, socialshare should stay as their original format for OG compatibility)
-const SKIP_FILES = ["favicon.ico", "socialshare.png", "logo.png"];
+const SKIP_FILES = ["favicon.ico", "socialshare.png", "logo.png", "aisocial.jpg", "aisocial.png"];
 
 let converted = 0;
 let skipped = 0;

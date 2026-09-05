@@ -126,6 +126,19 @@ body {
     display: block !important;
   }
 
+  .prose figure {
+    margin: 2.5rem 0 !important;
+  }
+
+  .prose figcaption {
+    text-align: center !important;
+    font-size: 0.875rem !important;
+    color: #6b7280 !important;
+    font-style: italic !important;
+    margin-top: 0.6rem !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+  }
+
   .prose pre {
     background: #1a1a1a !important;
     color: #e5e7eb !important;
